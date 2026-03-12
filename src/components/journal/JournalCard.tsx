@@ -18,19 +18,19 @@ interface JournalCardProps {
   onStickerSelect?: (s: string) => void;
   flipped?: boolean;
   compact?: boolean;
+  noSparkle?: boolean;
 }
 
-const JournalCard = ({ index, text, sticker, onStickerSelect, flipped = false, compact = false }: JournalCardProps) => {
+const JournalCard = ({ index, text, sticker, onStickerSelect, flipped = false, compact = false, noSparkle = false }: JournalCardProps) => {
   const [sparkle, setSparkle] = useState(false);
   const bg = BG_CLASSES[index % BG_CLASSES.length];
 
   const handleFlip = () => {
-    if (flipped) setSparkle(true);
+    if (flipped && !noSparkle) setSparkle(true);
   };
 
-  // Trigger sparkle on mount when flipped
   useState(() => {
-    if (flipped) {
+    if (flipped && !noSparkle) {
       setTimeout(() => setSparkle(true), 300);
     }
   });
@@ -41,7 +41,7 @@ const JournalCard = ({ index, text, sticker, onStickerSelect, flipped = false, c
         className={`relative journal-card ${bg} ${flipped ? "flipped" : ""} ${compact ? "min-h-[120px]" : "min-h-[160px]"}`}
         onAnimationEnd={handleFlip}
       >
-        <SparkleEffect active={sparkle} />
+        {!noSparkle && <SparkleEffect active={sparkle} />}
         {!flipped ? (
           <div className="journal-card-front flex items-center justify-center h-full">
             <span className="text-2xl opacity-30">📝</span>

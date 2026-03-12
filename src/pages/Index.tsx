@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import IntroScreen from "@/components/journal/IntroScreen";
 import PromptScreen from "@/components/journal/PromptScreen";
-import EntryRevealScreen from "@/components/journal/EntryRevealScreen";
 import ReflectionScreen from "@/components/journal/ReflectionScreen";
 import CompletionScreen from "@/components/journal/CompletionScreen";
+import HistoryScreen from "@/components/journal/HistoryScreen";
 
 const PROMPTS = [
   {
@@ -37,32 +37,30 @@ interface Entry {
   sticker: string | null;
 }
 
-type Screen = "intro" | "prompt" | "reveal" | "reflection" | "completion";
+interface SavedJournal {
+  entries: Entry[];
+  date: string;
+}
+
+type Screen = "intro" | "prompt" | "reflection" | "completion" | "history";
 
 const Index = () => {
   const [screen, setScreen] = useState<Screen>("intro");
   const [promptIndex, setPromptIndex] = useState(0);
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [history, setHistory] = useState<SavedJournal[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("journal-history");
+    if (saved) setHistory(JSON.parse(saved));
+  }, []);
 
   const handleStart = () => setScreen("prompt");
 
   const handleSubmit = (text: string) => {
     setEntries((prev) => [...prev, { text, sticker: null }]);
-    setScreen("reveal");
-  };
-
-  const handleStickerSelect = (s: string) => {
-    setEntries((prev) => {
-      const copy = [...prev];
-      copy[copy.length - 1] = { ...copy[copy.length - 1], sticker: s };
-      return copy;
-    });
-  };
-
-  const handleRevealContinue = () => {
     if (promptIndex < PROMPTS.length - 1) {
       setPromptIndex((p) => p + 1);
-      setScreen("prompt");
     } else {
       setScreen("reflection");
     }
@@ -71,6 +69,13 @@ const Index = () => {
   const handleReflectionComplete = () => setScreen("completion");
 
   const handleSave = () => {
+    const journal: SavedJournal = {
+      entries,
+      date: new Date().toISOString(),
+    };
+    const updated = [journal, ...history];
+    setHistory(updated);
+    localStorage.setItem("journal-history", JSON.stringify(updated));
     toast.success("Journal saved! 🌈");
   };
 
@@ -80,12 +85,16 @@ const Index = () => {
     setEntries([]);
   };
 
+  const handleViewHistory = () => setScreen("history");
+  const handleBackFromHistory = () => setScreen("intro");
+
   switch (screen) {
     case "intro":
-      return <IntroScreen onStart={handleStart} />;
+      return <IntroScreen onStart={handleStart} onViewHistory={handleViewHistory} hasHistory={history.length > 0} />;
     case "prompt":
       return (
         <PromptScreen
+          key={promptIndex}
           prompt={PROMPTS[promptIndex].prompt}
           hints={PROMPTS[promptIndex].hints}
           current={promptIndex + 1}
@@ -94,21 +103,12 @@ const Index = () => {
           onSubmit={handleSubmit}
         />
       );
-    case "reveal":
-      return (
-        <EntryRevealScreen
-          index={entries.length - 1}
-          text={entries[entries.length - 1].text}
-          sticker={entries[entries.length - 1].sticker}
-          onStickerSelect={handleStickerSelect}
-          onContinue={handleRevealContinue}
-          isLast={promptIndex === PROMPTS.length - 1}
-        />
-      );
     case "reflection":
       return <ReflectionScreen entries={entries} onComplete={handleReflectionComplete} />;
     case "completion":
       return <CompletionScreen entries={entries} onSave={handleSave} onRestart={handleRestart} />;
+    case "history":
+      return <HistoryScreen journals={history} onBack={handleBackFromHistory} />;
   }
 };
 

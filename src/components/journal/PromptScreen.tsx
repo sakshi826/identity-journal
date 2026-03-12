@@ -15,7 +15,7 @@ const PromptScreen = ({ prompt, hints, current, total, isLast, onSubmit }: Promp
   const [text, setText] = useState("");
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen rainbow-bg px-6 py-10">
+    <div className="flex flex-col items-center justify-center min-h-screen rainbow-bg px-6 py-10 animate-fade-in">
       <div className="max-w-md w-full space-y-5">
         <ProgressBar current={current} total={total} />
 
