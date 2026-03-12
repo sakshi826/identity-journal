@@ -16,7 +16,7 @@ const ReflectionScreen = ({ entries, onComplete }: ReflectionScreenProps) => {
   const [meaningful, setMeaningful] = useState("");
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen rainbow-bg px-6 py-10">
+    <div className="flex flex-col items-center justify-center min-h-screen rainbow-bg px-6 py-10 animate-fade-in">
       <div className="max-w-md w-full space-y-5">
         <h2 className="text-lg text-center text-foreground">Your Gratitude Reflections</h2>
         <p className="text-sm text-muted-foreground text-center journal-font text-justify">
@@ -25,7 +25,7 @@ const ReflectionScreen = ({ entries, onComplete }: ReflectionScreenProps) => {
 
         <div className="space-y-4">
           {entries.map((entry, i) => (
-            <JournalCard key={i} index={i} text={entry.text} sticker={entry.sticker} flipped compact />
+            <JournalCard key={i} index={i} text={entry.text} sticker={entry.sticker} flipped compact noSparkle />
           ))}
         </div>
 
