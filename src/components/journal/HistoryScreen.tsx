@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface Entry {
   text: string;
@@ -20,19 +21,21 @@ const CARD_COLORS = [
 ];
 
 const HistoryScreen = ({ journals, onBack }: { journals: SavedJournal[]; onBack: () => void }) => {
+  const { t, i18n } = useTranslation();
+
   return (
     <div className="flex flex-col items-center min-h-screen rainbow-bg px-6 py-10 animate-fade-in">
       <div className="max-w-md w-full space-y-6">
-        <h2 className="text-xl text-center text-foreground">Past Journals</h2>
+        <h2 className="text-xl text-center text-foreground">{t("history.title")}</h2>
 
         {journals.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center journal-font">No journals saved yet.</p>
+          <p className="text-sm text-muted-foreground text-center journal-font">{t("history.empty")}</p>
         ) : (
           <div className="space-y-6">
             {journals.map((journal, ji) => (
               <div key={ji} className="bg-card/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm space-y-3">
                 <p className="text-xs text-muted-foreground journal-font">
-                  {new Date(journal.date).toLocaleDateString(undefined, {
+                  {new Date(journal.date).toLocaleDateString(i18n.language, {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -57,7 +60,7 @@ const HistoryScreen = ({ journals, onBack }: { journals: SavedJournal[]; onBack:
         )}
 
         <Button variant="pride" size="lg" className="w-full" onClick={onBack}>
-          Back
+          {t("history.back")}
         </Button>
       </div>
     </div>

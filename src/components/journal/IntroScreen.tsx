@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const IntroScreen = ({ onStart, onViewHistory, hasHistory, onBack }: { onStart: () => void; onViewHistory: () => void; hasHistory: boolean; onBack?: () => void }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen rainbow-bg px-6 py-10 animate-fade-in relative">
       {onBack && (
@@ -12,18 +15,17 @@ const IntroScreen = ({ onStart, onViewHistory, hasHistory, onBack }: { onStart: 
       <div className="max-w-md w-full text-center space-y-6">
         <div className="text-5xl mb-2">📔</div>
         <h1 className="text-2xl leading-tight text-foreground">
-          Identity Gratitude Journal
+          {t("app.title")}
         </h1>
-        <p className="text-muted-foreground text-sm leading-relaxed text-justify journal-font">
-          Gratitude helps us notice the strength and beauty in who we are.
-          In this activity, you'll write a few reflections about parts of your identity you appreciate.
+        <p className="text-muted-foreground text-sm leading-relaxed text-center journal-font">
+          {t("intro.subtitle")}
         </p>
         <Button variant="pride" size="lg" onClick={onStart} className="w-full mt-4">
-          Start Journal
+          {t("intro.start")}
         </Button>
         {hasHistory && (
           <Button variant="ghost" size="lg" className="w-full text-muted-foreground" onClick={onViewHistory}>
-            View Past Journals
+            {t("intro.history")}
           </Button>
         )}
       </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import ProgressBar from "./ProgressBar";
+import { useTranslation } from "react-i18next";
 
 interface PromptScreenProps {
   prompt: string;
@@ -15,6 +16,7 @@ interface PromptScreenProps {
 
 const PromptScreen = ({ prompt, hints, current, total, isLast, onSubmit, onBack }: PromptScreenProps) => {
   const [text, setText] = useState("");
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen rainbow-bg px-6 py-10 animate-fade-in relative">
@@ -25,19 +27,19 @@ const PromptScreen = ({ prompt, hints, current, total, isLast, onSubmit, onBack 
         <ProgressBar current={current} total={total} />
 
         <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-5 shadow-md space-y-4">
-          <h2 className="text-lg text-foreground leading-snug text-justify">{prompt}</h2>
+          <h2 className="text-lg text-foreground leading-snug text-justify">{t(prompt)}</h2>
 
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Write your reflection here..."
+            placeholder={t("prompt.placeholder")}
             className="w-full min-h-[120px] p-4 rounded-xl bg-background/60 border border-border text-foreground journal-font text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring text-justify"
           />
 
           <div className="space-y-1.5">
-            <p className="text-xs text-muted-foreground">Example reflections:</p>
+            <p className="text-xs text-muted-foreground">{t("prompt.examples")}:</p>
             {hints.map((h, i) => (
-              <p key={i} className="text-xs text-muted-foreground italic journal-font text-justify">"{h}"</p>
+              <p key={i} className="text-xs text-muted-foreground italic journal-font text-justify">"{t(h)}"</p>
             ))}
           </div>
         </div>
@@ -49,7 +51,7 @@ const PromptScreen = ({ prompt, hints, current, total, isLast, onSubmit, onBack 
           disabled={!text.trim()}
           onClick={() => onSubmit(text.trim())}
         >
-          {isLast ? "Finish Journal" : "Next"}
+          {isLast ? t("completion.restart") : t("prompt.next")}
         </Button>
       </div>
     </div>

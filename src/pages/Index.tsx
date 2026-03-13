@@ -5,29 +5,30 @@ import PromptScreen from "@/components/journal/PromptScreen";
 import ReflectionScreen from "@/components/journal/ReflectionScreen";
 import CompletionScreen from "@/components/journal/CompletionScreen";
 import HistoryScreen from "@/components/journal/HistoryScreen";
+import { useTranslation } from "react-i18next";
 
 const PROMPTS = [
   {
-    prompt: "What part of your identity are you grateful for today?",
+    prompt: "prompt_1",
     hints: [
-      "I'm grateful for my courage to live authentically.",
-      "I'm grateful for the community that supports me.",
-      "I'm grateful for the resilience I've developed.",
+      "hint_1_1",
+      "hint_1_2",
+      "hint_1_3",
     ],
   },
   {
-    prompt: "What experience or journey helped shape who you are?",
+    prompt: "prompt_2",
     hints: [
-      "My experiences helped me grow stronger.",
-      "My journey helped me understand others better.",
+      "hint_2_1",
+      "hint_2_2",
     ],
   },
   {
-    prompt: "What strength in yourself are you grateful for?",
+    prompt: "prompt_3",
     hints: [
-      "My resilience.",
-      "My empathy.",
-      "My creativity.",
+      "hint_3_1",
+      "hint_3_2",
+      "hint_3_3",
     ],
   },
 ];
@@ -45,6 +46,7 @@ interface SavedJournal {
 type Screen = "intro" | "prompt" | "reflection" | "completion" | "history";
 
 const Index = () => {
+  const { t } = useTranslation();
   const [screen, setScreen] = useState<Screen>("intro");
   const [promptIndex, setPromptIndex] = useState(0);
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -76,7 +78,7 @@ const Index = () => {
     const updated = [journal, ...history];
     setHistory(updated);
     localStorage.setItem("journal-history", JSON.stringify(updated));
-    toast.success("Journal saved! 🌈");
+    toast.success(t("common.rainbow"));
   };
 
   const handleRestart = () => {
