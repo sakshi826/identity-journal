@@ -56,8 +56,11 @@ const Index = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const userId = sessionStorage.getItem("user_id");
-        if (!userId) return;
+        let userId = sessionStorage.getItem("user_id");
+        if (!userId) {
+          userId = "1001"; // Default guest user ID
+          sessionStorage.setItem("user_id", userId);
+        }
         const response = await axios.get("/api/journals", {
           headers: { "x-user-id": userId }
         });
@@ -84,8 +87,11 @@ const Index = () => {
 
   const handleSave = async () => {
     try {
-      const userId = sessionStorage.getItem("user_id");
-      if (!userId) throw new Error("No user ID");
+      let userId = sessionStorage.getItem("user_id");
+      if (!userId) {
+        userId = "1001";
+        sessionStorage.setItem("user_id", userId);
+      }
 
       await axios.post("/api/journals", 
         { entries },
