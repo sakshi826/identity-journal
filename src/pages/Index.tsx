@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import axios from "axios";
 import IntroScreen from "@/components/journal/IntroScreen";
 import PromptScreen from "@/components/journal/PromptScreen";
 import ReflectionScreen from "@/components/journal/ReflectionScreen";
@@ -53,8 +54,19 @@ const Index = () => {
   const [history, setHistory] = useState<SavedJournal[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("journal-history");
-    if (saved) setHistory(JSON.parse(saved));
+    const fetchHistory = async () => {
+      try {
+        const userId = sessionStorage.getItem("user_id");
+        if (!userId) return;
+        const response = await axios.get("/api/journals", {
+          headers: { "x-user-id": userId }
+        });
+        setHistory(response.data);
+      } catch (err) {
+        console.error("Error fetching history:", err);
+      }
+    };
+    fetchHistory();
   }, []);
 
   const handleStart = () => setScreen("prompt");
@@ -70,15 +82,27 @@ const Index = () => {
 
   const handleReflectionComplete = () => setScreen("completion");
 
-  const handleSave = () => {
-    const journal: SavedJournal = {
-      entries,
-      date: new Date().toISOString(),
-    };
-    const updated = [journal, ...history];
-    setHistory(updated);
-    localStorage.setItem("journal-history", JSON.stringify(updated));
-    toast.success(t("common.rainbow"));
+  const handleSave = async () => {
+    try {
+      const userId = sessionStorage.getItem("user_id");
+      if (!userId) throw new Error("No user ID");
+
+      await axios.post("/api/journals", 
+        { entries },
+        { headers: { "x-user-id": userId } }
+      );
+
+      // Refresh history
+      const response = await axios.get("/api/journals", {
+        headers: { "x-user-id": userId }
+      });
+      setHistory(response.data);
+      
+      toast.success(t("common.rainbow"));
+    } catch (err) {
+      console.error("Error saving journal:", err);
+      toast.error("Failed to save journal");
+    }
   };
 
   const handleRestart = () => {
