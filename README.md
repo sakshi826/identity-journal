@@ -1,73 +1,63 @@
-# Welcome to your Lovable project
+# Identity Journal
+
+A premium, localized space for self-reflection and identity exploration.
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**Production URL**: https://github.com/sakshi826/identity-journal
+**Deployment Base Path**: `/identity_journal/`
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **Multi-language Support**: 20 languages supported using `i18next`.
+- **Dynamic Translations**: Auto-generated translations using Google Translate API.
+- **Subpath Deployment**: Configured for hosting on `/identity_journal/`.
+- **Docker Support**: Multi-stage build for production serving via Nginx.
+- **CI/CD**: GitHub Actions workflow for automatic container builds.
 
-**Use Lovable**
+## How can I run this locally?
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+1. **Install dependencies**:
+   ```sh
+   npm install
+   ```
 
-Changes made via Lovable will be committed automatically to this repo.
+2. **Start the development server**:
+   ```sh
+   npm run dev
+   ```
 
-**Use your preferred IDE**
+3. **Build for production**:
+   ```sh
+   npm run build
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Internationalization (i18n)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+The project uses `i18next`. To generate or update translations:
+- Ensure your Google Translate API key is in the `.env` file.
+- Run the translation script:
+  ```sh
+  npx ts-node scripts/generateTranslations.ts
+  ```
 
-Follow these steps:
+## Deployment
 
+The project is served via Nginx. Configuration is in `vite-nginx.conf`.
+To build the Docker image locally:
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+docker build -t identity_journal .
 ```
 
-**Edit a file directly in GitHub**
+To run the container:
+```sh
+docker run -p 80:80 identity_journal
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Technologies Used
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- **Vite** & **TypeScript**
+- **React**
+- **Tailwind CSS** & **shadcn-ui**
+- **i18next**
+- **Docker** & **Nginx**
