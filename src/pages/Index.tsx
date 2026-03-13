@@ -103,7 +103,7 @@ const Index = () => {
 
   switch (screen) {
     case "intro":
-      return <IntroScreen onStart={handleStart} onViewHistory={handleViewHistory} hasHistory={history.length > 0} />;
+      return <IntroScreen onStart={handleStart} onViewHistory={handleViewHistory} hasHistory={history.length > 0} onBack={() => window.history.back()} />;
     case "prompt":
       return (
         <PromptScreen
