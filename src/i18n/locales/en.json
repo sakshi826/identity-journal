@@ -37,5 +37,10 @@
   "prompt_3": "What strength in yourself are you grateful for?",
   "hint_3_1": "My resilience.",
   "hint_3_2": "My empathy.",
-  "hint_3_3": "My creativity."
+  "hint_3_3": "My creativity.",
+  "auth.loading": "Authenticating...",
+  "auth.required": "Authentication Required",
+  "auth.description": "You must provide a valid token to access your Identity Journal.",
+  "auth.instructions": "Please use a valid link with an access token or contact support if you believe this is an error.",
+  "auth.demo": "Try with Demo Token"
 }

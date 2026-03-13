@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 interface AuthHandlerProps {
   children: React.ReactNode;
 }
 
 const AuthHandler = ({ children }: AuthHandlerProps) => {
+  const { t } = useTranslation();
   const [isAuthResolved, setIsAuthResolved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,7 +62,7 @@ const AuthHandler = ({ children }: AuthHandlerProps) => {
     return (
       <div className="fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
         <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <p className="mt-4 text-gray-600 font-medium">Authenticating...</p>
+        <p className="mt-4 text-gray-600 font-medium">{t("auth.loading")}</p>
       </div>
     );
   }
